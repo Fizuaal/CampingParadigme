@@ -1,0 +1,1 @@
+getmdlSelect.init(cssSelector)
