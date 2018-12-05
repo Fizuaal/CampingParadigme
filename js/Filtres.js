@@ -1,4 +1,4 @@
-console.log(getmdlSelect.init("#Selecteur"));
+console.log(getmdlSelect.init("typeUtlisateur"));
 // switch (filtre) {
 //     case 'All':
 //         console.log('Oranges are $0.59 a pound.');

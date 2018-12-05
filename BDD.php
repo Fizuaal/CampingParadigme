@@ -172,7 +172,6 @@
             $dtFerm = stripslashes('NULL');
         }
         $req = $bdd->prepare("UPDATE compte SET DATEFERME = ".$dtFerm." WHERE USER= '".$resultat['USER']."'");
-        var_dump($req);
             $req->execute();
     }
 
@@ -266,4 +265,5 @@
                 ');
             }
     }
+    
   ?>
