@@ -14,7 +14,7 @@ if(!isset($_SESSION['TYPEPROFIL']) || $_SESSION['TYPEPROFIL'] != 'Admin'){
             <input class="mdl-textfield__input" type="text" id="Rechercher">
             <label class="mdl-textfield__label" for="Rechercher">Rechercher un Utilisateur</label><i class="material-icons">search</i>
         </div>
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
+        <div #Selecteur class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
             <input type="text" value="" class="mdl-textfield__input" id="typeUtlisateur" readonly>
             <input type="hidden" value="" name="typeUtlisateur">
             <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>

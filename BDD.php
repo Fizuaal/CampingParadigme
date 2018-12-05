@@ -241,7 +241,7 @@
                     ';
                 }
                 echo ('
-                <div class="mdl-list__item mdl-list__item--two-line '.$isDisabled.' '.$user['TYPEPROFIL'].'">
+                <div #Utilisateurs class="mdl-list__item mdl-list__item--two-line '.$isDisabled.' '.$user['TYPEPROFIL'].'">
                     <span class="mdl-list__item-primary-content">
                         <i class="material-icons mdl-list__item-avatar '.$isDisabledBackground.'">person</i>
                         <span>'.$user['USER'].':</span>
