@@ -84,9 +84,6 @@
 				<span class="mdl-layout-title">Camping Paradigme</span>
 				<nav class="mdl-navigation">
 				  <a class="mdl-navigation__link" href="Accueil.php">Accueil</a>
-				  <a class="mdl-navigation__link" href="Deposer.php">Déposer votre Annonce</a>
-				  <a class="mdl-navigation__link" href="">Mes Favoris</a>
-				  <a class="mdl-navigation__link" href="">Recherche avancée</a>
 					<?php 
 					if(isset($_SESSION['TYPEPROFIL'])){
 						if($_SESSION['TYPEPROFIL'] == 'Admin'){

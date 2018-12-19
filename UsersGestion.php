@@ -1,7 +1,8 @@
 <?php require 'Header.php' ?>
-<script type="text/javascript" src="js/getmdl-select.js"></script>
+<script type="text/javascript" src="css/GET_MDL_SELECT/getmdl-select.min.js"></script>
 <script type="text/javascript" src="js/Filtres.js"></script>
 <?php 
+
 if(!isset($_SESSION['TYPEPROFIL']) || $_SESSION['TYPEPROFIL'] != 'Admin'){
     exit("Vous n'avez pas les droits nécéssaires");
 }

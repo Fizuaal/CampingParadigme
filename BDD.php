@@ -265,5 +265,62 @@
                 ');
             }
     }
+
+    function NewAnimation($bdd, $typeAnim, $descAnim){
+
+    }
+
+    function NewTypeAnimation($bdd, $typeAnim, $descAnim){
+
+    }
+
+    function ListAllAnimations($bdd){
+        $req = $bdd->prepare('SELECT CODEANIM, NOMTYPEANIM, NOMANIM, DATEVALIDITEANIM, DUREEANIM, LIMITEAGE, TARIFANIM, NBREPLACEANIM, DESCRIPTANIM, DIFFICULTEANIM
+        FROM animation A, type_anim TA
+        where A.CODETYPEANIM = TA.CODETYPEANIM');
+            $req->execute();
+            $resultat = $req->fetchAll();
+            var_dump($resultat['DATEVALIDITEANIM']);
+            $dtFinAnim = new DateTime(addslashes($resultat['DATEVALIDITEANIM']));
+            $dtFinAnim = $dtFinAnim -> format("Y/m/d");
+            var_dump($dtFinAnim);
+
+            foreach($resultat as $key=>$anim)
+            {
+                if($dtFinAnim <= date("Y/m/d")){
+                    echo ('
+                    <li class="mdl-list__item mdl-list__item--three-line">
+                        <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-avatar">person</i>
+                        <span>'.$anim['NOMANIM'].'</span>
+                        <span class="mdl-list__item-text-body">
+                            '.$anim['DESCRIPTANIM'].'
+                        </span>
+                        </span>
+                        <span class="mdl-list__item-secondary-content">
+                        <form id="Action'.$anim['CODEANIM'].'" method="POST" action="InscriptionAnimation.php">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" 
+                            onclick="getElementById(\'Action'.$anim['CODEANIM'].'\').submit()">
+                            S\'inscrire
+                            </button>
+                            <input type="hidden" name="codeAnim" value="'.$anim['CODEANIM'].'" />
+                            <input type="hidden" name="ID" value="'.$_SESSION['ID'].'" />
+                        </form>
+                        </span>
+                    </li>                
+                ');
+                }
+            }
+    }
+
     
+    function InscriptionActivité($bdd, $codeAct, $nomInscrit){
+
+        $requete = "INSERT INTO `inscription`(`USER`, `CODEANIM`, `DATEACT`, `DATEINSCRIP`, `DATEANNULE`) 
+        VALUES (".$nomInscrit.",".$codeAnim.",[value-4],[value-5],[value-6])";
+
+                $verif = $bdd->exec($requete);
+        
+    }
+
   ?>
