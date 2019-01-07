@@ -280,13 +280,11 @@
         where A.CODETYPEANIM = TA.CODETYPEANIM');
             $req->execute();
             $resultat = $req->fetchAll();
-            var_dump($resultat['DATEVALIDITEANIM']);
-            $dtFinAnim = new DateTime(addslashes($resultat['DATEVALIDITEANIM']));
-            $dtFinAnim = $dtFinAnim -> format("Y/m/d");
-            var_dump($dtFinAnim);
 
             foreach($resultat as $key=>$anim)
-            {
+            {     
+                $dtFinAnim = new DateTime(addslashes($resultat[$key]['DATEVALIDITEANIM']));
+                $dtFinAnim = $dtFinAnim -> format("Y/m/d");
                 if($dtFinAnim <= date("Y/m/d")){
                     echo ('
                     <li class="mdl-list__item mdl-list__item--three-line">
@@ -306,6 +304,8 @@
                             <input type="hidden" name="codeAnim" value="'.$anim['CODEANIM'].'" />
                             <input type="hidden" name="ID" value="'.$_SESSION['ID'].'" />
                         </form>
+                        <span>'.$dtFinAnim.'</span>
+                        <span>'.$anim['NBREPLACEANIM'].'</span>
                         </span>
                     </li>                
                 ');
