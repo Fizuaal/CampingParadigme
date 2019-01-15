@@ -71,10 +71,12 @@ function Enregistrement()
 
 function montreSelecteurType()
 { 
+    document.getElementById('newType').style.display = "none"
     document.getElementById('SelecteurType').style.display = "block";
 }
 
 function cacheSelecteurType()
 {
+    document.getElementById('newType').style.display = "block"
     document.getElementById('SelecteurType').style.display = "none";
 }
