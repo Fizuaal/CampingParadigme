@@ -68,3 +68,13 @@ function Enregistrement()
             setTimeOut(fonctionAExecuter, 3000)
         });
     };
+
+function montreSelecteurType()
+{ 
+    document.getElementById('SelecteurType').style.display = "block";
+}
+
+function cacheSelecteurType()
+{
+    document.getElementById('SelecteurType').style.display = "none";
+}
