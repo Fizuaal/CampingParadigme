@@ -76,6 +76,33 @@
                     </div>
                 <td>
             </tr>
+            <tr>
+                <td>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="commentaire">
+                        <label class="mdl-textfield__label" for="commentaire">Commentaire</label>
+                    </div>
+                </td>
+                <td>
+                    <div id="SelecteurType" class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label">
+                        <select id="difficulte" class="mdl-selectfield__select">
+                            <option value="Facile">Facile</option>
+                            <option value="Moyen">Moyen</option>
+                            <option value="Difficile">Difficile</option>
+                        </select>
+                        <div class="mdl-selectfield__icon"><i class="material-icons">arrow_drop_down</i></div>
+                        <label class="mdl-selectfield__label" for="difficulte">Difficulté</label>
+                    </div>
+                <td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="resize: none;width: 40vw !important;height: 24vh !important;" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label areaDesc">
+                        <textarea style="resize: none;width: 40vw !important;height: 19vh !important;" class="mdl-textfield__input" type="text" rows= "1" id="Desc"></textarea>
+                        <label class="mdl-textfield__label" for="Desc">Description</label>
+                    </div>
+                <td>
+            </tr>
         </table>
     </form>
 </div>

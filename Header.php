@@ -90,7 +90,6 @@
 							echo '<a class="mdl-navigation__link" href="UsersGestion.php">Gestion des utilisateurs</a>';
 						}
 						if($_SESSION['TYPEPROFIL'] == 'Animateur' || $_SESSION['TYPEPROFIL'] == 'Admin'){
-							echo '<a class="mdl-navigation__link" href="ActivitesGestion.php">Gestion des Activités</a>';
 							echo '<a class="mdl-navigation__link" href="AnimationsGestion.php">Gestion des Animations</a>';
 						}
 					}

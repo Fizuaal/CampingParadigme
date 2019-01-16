@@ -297,7 +297,7 @@
                 $dtFinAnim = $dtFinAnim -> format("Y/m/d");
                 if($dtFinAnim <= date("Y/m/d")){
                     echo ('
-                    <li class="mdl-list__item mdl-list__item--three-line">
+                    <li class="mdl-list__item mdl-list__item--three-line demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
                         <span class="mdl-list__item-primary-content">
                         <i style="margin-top: 15px;" class="material-icons mdl-list__item-icon">assignment</i>
                         <span>'.$anim['NOMANIM'].'</span>
