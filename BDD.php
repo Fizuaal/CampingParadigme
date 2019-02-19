@@ -266,12 +266,31 @@
             }
     }
 
-    function NewAnimation($bdd, $typeAnim, $descAnim){
-
+    function NewAnimation($bdd){
+        if($_POST['nvType'] == true){
+            $cdType = NewTypeAnimation($bdd);
+            
+        }
+        else{
+            $cdType = $_POST['typeAnim']; 
+        }
+        $req = $bdd->prepare('
+        INSERT INTO `animation`(`CODEANIM`, `CODETYPEANIM`, `NOMANIM`, `DATECREATIONANIM`, `DATEVALIDITEANIM`, `DUREEANIM`, 
+        `LIMITEAGE`, `TARIFANIM`, `NBREPLACEANIM`, `DESCRIPTANIM`, `COMMENTANIM`, `DIFFICULTEANIM`) 
+        VALUES ("'.substr($_POST['nomAnim'], 0 , 5).substr($cdType, 0 , 3).'","'.$cdType.'", "'.$_POST['nomAnim'].'","'.date("Y-m-d").'", "'.$_POST['dtFinValidite'].'", '.$_POST['dureeAnim'].', '.$_POST['limAge'].', '.$_POST['tarifAnim'].',
+        '.$_POST['nbrPlaces'].', "'.$_POST['descAnim'].'", "'.$_POST['commentaireAnim'].'", "'.$_POST['difficulteAnim'].'")');
+        var_dump($req);
+        $req->execute();
+        $resultat = $req->fetchAll();
     }
 
-    function NewTypeAnimation($bdd, $typeAnim, $descAnim){
-
+    function NewTypeAnimation($bdd){
+        $nvTypeAnim = ucfirst(strtolower($_POST['newTypeAnim']));
+        $nvCode = substr($nvTypeAnim, 0 , 4);
+        $req = $bdd->prepare('INSERT INTO `type_anim`(`CODETYPEANIM`, `NOMTYPEANIM`) VALUES ("'.$nvCode.'","'.$nvTypeAnim.'")');
+        var_dump($req);
+        $req->execute();
+        return $nvCode;
     }
 
     function listTypesAnim($bdd){
@@ -295,12 +314,12 @@
             {     
                 $dtFinAnim = new DateTime(addslashes($resultat[$key]['DATEVALIDITEANIM']));
                 $dtFinAnim = $dtFinAnim -> format("Y/m/d");
-                if($dtFinAnim <= date("Y/m/d")){
+                if($dtFinAnim >= date("Y/m/d")){
                     echo ('
                     <li class="mdl-list__item mdl-list__item--three-line demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
                         <span class="mdl-list__item-primary-content">
                         <i style="margin-top: 15px;" class="material-icons mdl-list__item-icon">assignment</i>
-                        <span>'.$anim['NOMANIM'].'</span>
+                        <span>'.$anim['NOMTYPEANIM'].' - '.$anim['NOMANIM'].'</span>
                         <span class="mdl-list__item-text-body">
                             '.$anim['DESCRIPTANIM'].'
                         </span>
