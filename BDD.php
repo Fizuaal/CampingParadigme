@@ -316,7 +316,8 @@
                 $dtFinAnim = $dtFinAnim -> format("Y/m/d");
                 if($dtFinAnim >= date("Y/m/d")){
                     echo ('
-                    <li class="mdl-list__item mdl-list__item--three-line demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+                    <li class="mdl-list__item mdl-list__item--three-line demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid"
+                    style="width: calc(80vw - 16px);height: 100px;">
                         <span class="mdl-list__item-primary-content">
                         <i style="margin-top: 15px;" class="material-icons mdl-list__item-icon">assignment</i>
                         <span>'.$anim['NOMTYPEANIM'].' - '.$anim['NOMANIM'].'</span>
@@ -326,6 +327,7 @@
                         </span>
                         <span class="mdl-list__item-secondary-content">
                             <span class="mdl-list__item-secondary-info">'.$dtFinAnim.'</span>
+                            <span class="mdl-list__item-secondary-info" style="font-size: 20px;margin-top: 5px;">'.$anim['TARIFANIM'].'€</span>
                             <span class="mdl-list__item-secondary-info" style="font-size: 20px;margin-top: 17px;">'.$anim['NBREPLACEANIM'].' Places</span>
                         </span>
                         <span class="mdl-list__item-secondary-content">
@@ -333,6 +335,14 @@
                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" 
                             onclick="getElementById(\'Action'.$anim['CODEANIM'].'\').submit()">
                             Créer une activité
+                            </button>
+                            <input type="hidden" name="codeAnim" value="'.$anim['CODEANIM'].'" />
+                            <input type="hidden" name="ID" value="'.$_SESSION['ID'].'" />
+                        </form>
+                        <form id="Edit'.$anim['CODEANIM'].'" method="POST" action="ModificationAnimation.php" style="margin-top: 10px;">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" 
+                            onclick="getElementById(\'Action'.$anim['CODEANIM'].'\').submit()">
+                            Editer l\'animation
                             </button>
                             <input type="hidden" name="codeAnim" value="'.$anim['CODEANIM'].'" />
                             <input type="hidden" name="ID" value="'.$_SESSION['ID'].'" />
