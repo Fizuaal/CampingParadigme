@@ -1,5 +1,5 @@
-<?php require 'Header.php' ?>
+<?php require 'Header.php'; ?>
         
-<?php InscriptionActivité($bdd, $_POST['codeAnim'], $_POST['ID']) ?>
+<?php InscriptionActivité($bdd, $_POST['codeAnim'], $_POST['ID']); ?>
 
-<?php require 'Footer.php' ?>
+<?php require 'Footer.php'; ?>

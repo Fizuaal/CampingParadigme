@@ -331,7 +331,7 @@
                             <span class="mdl-list__item-secondary-info" style="font-size: 20px;margin-top: 17px;">'.$anim['NBREPLACEANIM'].' Places</span>
                         </span>
                         <span class="mdl-list__item-secondary-content">
-                        <form id="Action'.$anim['CODEANIM'].'" method="POST" action="InscriptionAnimation.php">
+                        <form id="Action'.$anim['CODEANIM'].'" method="POST" action="CreationActivite.php">
                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" 
                             onclick="getElementById(\'Action'.$anim['CODEANIM'].'\').submit()">
                             Créer une activité
@@ -354,14 +354,112 @@
             }
     }
 
+    function returnAnim($bdd, $codeAnim){
+        $req = $bdd->prepare('SELECT `NOMANIM` FROM `animation` WHERE `CODEANIM` = "'.$codeAnim.'"');
+        $req->execute();
+        $resultat = $req->fetchAll();
+        echo($resultat[0][0]);
+    }
     
     function InscriptionActivité($bdd, $codeAct, $nomInscrit){
 
         $requete = "INSERT INTO `inscription`(`USER`, `CODEANIM`, `DATEACT`, `DATEINSCRIP`, `DATEANNULE`) 
-        VALUES (".$nomInscrit.",".$codeAnim.",[value-4],[value-5],[value-6])";
+        VALUES (".$nomInscrit.",".$codeAct.",[value-4],[value-5],[value-6])";
 
                 $verif = $bdd->exec($requete);
         
+    }
+
+    function CreationActivité($bdd, $codeAct, $date, $HRRDVACT,$Prix, $Hdebut, $Hfin, $preAnim, $nomAnim){
+
+        $requete = $bdd->prepare("INSERT INTO `activite`(`CODEANIM`, `DATEACT`, `CODEETATACT`, `HRRDVACT`, `PRIXACT`, `HRDEBUTACT`, `HRFINACT`, `NOMRESP`, `PRENOMRESP`) 
+        VALUES (\"".$codeAct."\",\"".$date."\",1,\"".$HRRDVACT."\",\"".$Prix."\",\"".$Hdebut."\", \"".$Hfin."\",\"".$preAnim."\", \"".$nomAnim."\")");
+        var_dump($requete);
+        $requete->execute();
+    }
+
+    function RecupAnimationEtAnimateur($bdd, $codeAnim, $user){
+        $requete1 = $req1 = $bdd->prepare('SELECT NOMCOMPTE, PRENOMCOMPTE FROM compte WHERE user = "'.$user.'"');
+        $req1->execute();
+        $resultat1 = $req1->fetchAll();
+
+        $requete = $req = $bdd->prepare('SELECT CODEANIM, TARIFANIM FROM animation A where A.CODEANIM =  "'.$codeAnim.'"');
+        $req->execute();
+        $resultat = $req->fetchAll();
+        return  [$resultat[0]['CODEANIM'],$resultat[0]['TARIFANIM'], $resultat1[0]['NOMCOMPTE'], $resultat1[0]['PRENOMCOMPTE']];
+    }
+
+    function listAnimateurs($bdd){
+        $req = $bdd->prepare('SELECT * FROM `compte` WHERE `TYPEPROFIL` = "Animateur"');
+        $req->execute();
+        $resultat = $req->fetchAll();
+        foreach($resultat as $key=>$anim)
+        {   
+            echo ('<option value="'.$anim['USER'].'">'.$anim['PRENOMCOMPTE']." ".$anim['NOMCOMPTE'].'</option>');
+        }
+    }
+
+    function inscription(){
+        $req = $bdd->prepare('INSERT INTO inscription(NOINSCRIP, USER, CODEANIM, DATEACT, DATEINSCRIP, DATEANNULE) 
+        VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6])');
+        $req->execute();
+    }
+
+    function ListAllActivités($bdd){
+        $req = $bdd->prepare('SELECT AC.CODEANIM, T.NOMTYPEANIM, DATEACT, E.NOMETATACT, HRRDVACT, PRIXACT, HRDEBUTACT, HRFINACT, NOMRESP, PRENOMRESP, NBREPLACEANIM, AN.COMMENTANIM
+        FROM  activite AC, animation AN, etat_act E, type_anim T
+        WHERE AC.codeanim = AN.codeanim
+        AND E.CODEETATACT = AC.CODEETATACT
+        AND AN.CODETYPEANIM = T.CODETYPEANIM ');
+        $req->execute();
+        $resultat = $req->fetchAll();
+        //var_dump($resultat);
+        //var_dump($resultat[0]['DATEACT']);
+        foreach($resultat as $key=>$anim)
+        {
+            if($anim['DATEACT'] >= date("Y-m-d")){
+                echo ('
+                <li class="mdl-list__item mdl-list__item--three-line demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid"
+                style="width: calc(80vw - 16px);height: 100px;">
+                    <span class="mdl-list__item-primary-content">
+                    <i style="margin-top: 15px;" class="material-icons mdl-list__item-icon">assignment</i>
+                    <span>'.$anim['NOMTYPEANIM'].' - '.$anim['NOMETATACT'].'</span>
+                    <span class="mdl-list__item-text-body">
+                        '.$anim['COMMENTANIM'].'
+                    </span>
+                    </span>
+                    <span class="mdl-list__item-secondary-content">
+                        <span class="mdl-list__item-secondary-info">'.$anim['DATEACT'].'</span>
+                        <span class="mdl-list__item-secondary-info" style="font-size: 20px;margin-top: 5px;">'.$anim['PRIXACT'].'€</span>
+                        <span class="mdl-list__item-secondary-info" style="font-size: 20px;margin-top: 17px;">'.$anim['NBREPLACEANIM'].' Places</span>
+                    </span>
+                    <span class="mdl-list__item-secondary-content">');
+                    if(isset($_SESSION['ID']))
+                    {
+                        echo('
+                        <form id="Action'.$anim['CODEANIM'].'" method="POST" action="InscriptionAct.php">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" 
+                            onclick="getElementById(\'Action'.$anim['CODEANIM'].'\').submit()">
+                            S\'inscrire
+                            </button>
+                            <input type="hidden" name="codeAnim" value="'.$anim['CODEANIM'].'" />
+                            <input type="hidden" name="ID" value="'.$_SESSION['ID'].'" />
+                        </form>
+                        <form id="Edit'.$anim['CODEANIM'].'" method="POST" action="ModificationAnimation.php" style="margin-top: 10px;">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" 
+                            onclick="getElementById(\'Action'.$anim['CODEANIM'].'\').submit()">
+                            Editer l\'animation
+                            </button>
+                            <input type="hidden" name="codeAnim" value="'.$anim['CODEANIM'].'" />
+                        </form>
+                        ');
+                    }
+                        echo ('
+                    </span>
+                </li>                
+            ');
+            }
+        }
     }
 
   ?>
