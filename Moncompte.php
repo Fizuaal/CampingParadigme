@@ -10,23 +10,6 @@ else
 {
 $pseudo = ($_SESSION['ID']);    
 
-//  Récupération de l'utilisateur et de son pass hashé
-
-
-
-
-//A refaire mais pas urgent
-//Requete fausse et champs non valides
-
-
-
-
-
-
-$req = $bdd->prepare('SELECT PSEUDO, NOM, PRENOM, MAIL, DT_NAIS, PAYS, VILLE, CD_POSTAL, ADRESSE FROM utilisateurs WHERE pseudo = :pseudo OR mail = :pseudo');
-$req->execute(array(
-    'pseudo' => $pseudo));
-$resultat = $req->fetch();
 ?>
 
 
@@ -51,84 +34,6 @@ $resultat = $req->fetch();
     </div>
 </div>
 
-<form method="post">
-    <table>    
-        <tr>
-            <td>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <?php echo'<input class="mdl-textfield__input" type="text" value="'.$resultat["PRENOM"].'" name="prenom" id="prenom">' ?>
-                    <label class="mdl-textfield__label" for="prenom">Prénom : </label>
-                </div>
-            </td>
-            <td>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <?php echo'<input class="mdl-textfield__input" value="'.$resultat["NOM"].'" type="text" name="nom" id="nom">' ?>
-                    <label class="mdl-textfield__label" for="nom">Nom  : </label>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <?php echo'<input class="mdl-textfield__input" value="'.$resultat["PSEUDO"].'" type="text" name="pseudo" min="5" id="pseudo">' ?>
-                    <label class="mdl-textfield__label" for="pseudo"> Pseudo : </label>
-                </div>
-            </td>
-            <td>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <?php echo'<input class="mdl-textfield__input" value="'.$resultat["DT_NAIS"].'"type="text" name="dtnais" id="dtnais"/>' ?>
-                    <label class="mdl-textfield__label" for="dtnais">Date de naissance : </label>
-                </div>
-            <td>
-        </tr>
-        <tr>
-            <td>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label decale2">
-                <?php echo'<input class="mdl-textfield__input" type="email"value="'.$resultat["MAIL"].'" name="mail" id="mail" maxlength="80" onBlur="checkMail()" disabled>' ?>
-                    <label class="mdl-textfield__label" for="mail">Email  : </label>
-                    <span class="mdl-textfield__error">Exemple@domaine.fr</span>
-                </div>
-            </td>
-            <td>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <?php echo'<input class="mdl-textfield__input" type="text" value="'.$resultat["CD_POSTAL"].'"name="cdpost" id="cdpostal"pattern="-?[0-9]*(\.[0-9]+)?"maxlength="5">' ?>
-                    <label class="mdl-textfield__label" for="cdpostal"> Code Postale : </label>
-                    <span class="mdl-textfield__error">Le code postale est invalide </span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="password" value="XXXXXXXXX"name="mdp" min="6" id="mdp" onBlur="checkPass()" disabled>
-                    <label class="mdl-textfield__label" for="mdp"> Mot de passe :</label>                    
-                    <span class="mdl-textfield__error">Le mot de passeest trop court </span>
-                </div>
-            </td>            
-            <td>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <?php echo'<input class="mdl-textfield__input" value="'.$resultat["VILLE"].'"type="text" name="ville" id="ville">' ?>
-                    <label class="mdl-textfield__label" for="ville"> Ville :<label>
-                </div>
-            <td>
-        </tr>
-        <tr>
-            <td>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <?php echo'<input class="mdl-textfield__input" value="'.$resultat["ADRESSE"].'"type="text" name="adresse" id="adresse">' ?>
-                    <label class="mdl-textfield__label" for="adresse"> Adresse :</label>
-                </div>
-            </td>
-            <td>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <?php echo'<input class="mdl-textfield__input" value="'.$resultat["PAYS"].'"type="text" name="pays" id="pays">' ?>
-                    <label class="mdl-textfield__label" for="pays"> Pays: </label>
-                </div>
-            <td>
-        </tr>
-    </table>
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored decale" id="envoyer" name="envoyer" type="submit">Mettre à jour</button>
-</form>
 
 <?php
 
