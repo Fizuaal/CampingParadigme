@@ -92,6 +92,9 @@
 						if($_SESSION['TYPEPROFIL'] == 'Animateur' || $_SESSION['TYPEPROFIL'] == 'Admin'){
 							echo '<a class="mdl-navigation__link" href="AnimationsGestion.php">Gestion des Animations</a>';
 						}
+						if($_SESSION['TYPEPROFIL'] == 'Vacancier' || $_SESSION['TYPEPROFIL'] == 'Admin' || $_SESSION['TYPEPROFIL'] == 'Animateur'){
+							echo '<a class="mdl-navigation__link" href="CalculCalories.php">Calculateur de calories</a>';
+						}
 					}
 					?>
 				</nav>

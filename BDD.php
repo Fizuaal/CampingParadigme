@@ -567,4 +567,161 @@
         $requete = $bdd->prepare('DELETE FROM `activite` WHERE `CODEANIM` = "'.$codeAnim.'" AND `DATEACT`= "'.$dateAct.'"');
         $requete->execute();
     }
+
+    function ListAllActivitesDepensiere($bdd){
+        $req = $bdd->prepare('SELECT AC.CODEANIM, AN.NOMANIM, T.NOMTYPEANIM, DATEACT, E.NOMETATACT, HRRDVACT, PRIXACT, HRDEBUTACT, HRFINACT, NOMRESP, 
+        PRENOMRESP, NBREPLACEANIM, AN.COMMENTANIM, ptsBonheur, depCalories, ptsBonheur/dureeAnim as txBon
+        FROM  activite AC, animation AN, etat_act E, type_anim T
+        WHERE AC.codeanim = AN.codeanim
+        AND E.CODEETATACT = AC.CODEETATACT
+        AND AN.CODETYPEANIM = T.CODETYPEANIM 
+        ORDER BY ptsBonheur / dureeAnim DESC');
+        $req->execute();
+        $resultat = $req->fetchAll();
+        
+        $cinqPlusHaut = array();
+        for ($i = 1; $i <= 5; $i++){
+            array_push($cinqPlusHaut, $resultat[$i-1]);
+        }
+
+        foreach($cinqPlusHaut as $key=>$anim)
+        {
+            if($anim['DATEACT'] >= date("Y-m-d")){
+                echo ('
+                <li class="mdl-list__item mdl-list__item--three-line demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid"
+                style="width: calc(80vw - 16px);height: 150px;">
+                    <span class="mdl-list__item-primary-content">
+                    <i style="margin-top: 15px;" class="material-icons mdl-list__item-icon">assignment</i>
+                    <span>'.$anim['NOMTYPEANIM'].' - '.$anim['NOMANIM'].' - '.$anim['NOMETATACT'].'</span>
+                    <span class="mdl-list__item-text-body">
+                        '.$anim['COMMENTANIM'].'
+                    </span>
+                    <span>
+                        Taux de bonheur: '.$anim['txBon'].' - Dépense calorique: '.$anim['depCalories'].'
+                    </span>
+                    </span>
+                    <span class="mdl-list__item-secondary-content">
+                        <span class="mdl-list__item-secondary-info">'.$anim['DATEACT'].'</span>
+                        <span class="mdl-list__item-secondary-info" style="font-size: 20px;margin-top: 5px;">'.$anim['PRIXACT'].'€</span>');
+                        if(($anim['NBREPLACEANIM'] - comptePlaces($bdd, $anim['CODEANIM'], $anim['DATEACT'])) == 0){
+                            echo ('
+                            <span class="mdl-list__item-secondary-info" style="font-size: 20px;margin-top: 17px;">Complet</span>
+                            ');
+                            if($anim['NOMETATACT'] != 'Complet'){
+                                $req = $bdd->prepare('UPDATE Activite SET  CODEETATACT = 2
+                                WHERE codeanim = \''.$anim['CODEANIM'].'\'
+                                AND DATEACT =  \''.$anim['DATEACT'].'\'');
+                                $req->execute();
+                                var_dump($req);
+                                
+                            }
+                        }
+                        else{
+                            echo ('
+                            <span class="mdl-list__item-secondary-info" style="font-size: 20px;margin-top: 17px;">'.
+                            ($anim['NBREPLACEANIM'] - comptePlaces($bdd, $anim['CODEANIM'], $anim['DATEACT'])).'/'.$anim['NBREPLACEANIM'].' Places restantes</span>
+                            ');
+                        }
+                        echo ('
+                    </span>
+                    <span class="mdl-list__item-secondary-content">');
+                    
+                    if(isset($_SESSION['ID']))
+                    {
+                        $requete = $bdd->prepare('SELECT * 
+                        FROM inscription 
+                        WHERE USER = \''.$_SESSION['ID'].'\'
+                        AND CODEANIM = \''.$anim['CODEANIM'].'\'
+                        AND DATEACT = \''.$anim['DATEACT'].'\'');
+                        $requete->execute();
+                        $resultat2 = $requete->fetchAll();
+                        if(!empty($resultat2))
+                        {
+                            echo('
+                            <form id="Action'.$anim['CODEANIM'].'" method="POST" action="InscriptionAct.php">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" disabled>
+                                Déjà inscrit
+                                </button>
+                            </form>
+                        ');
+                        }
+                        else
+                        {
+                            echo('
+                            <form id="Action'.$anim['CODEANIM'].'" method="POST" action="InscriptionAct.php">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" 
+                                onclick="getElementById(\'Action'.$anim['CODEANIM'].'\').submit()">
+                                S\'inscrire
+                                </button>
+                                <input type="hidden" name="codeAnim" value="'.$anim['CODEANIM'].'" />
+                                <input type="hidden" name="ID" value="'.$_SESSION['ID'].'" />
+                                <input type="hidden" name="dateAct" value="'.$anim['DATEACT'].'" />
+                            </form>
+                            ');
+                        }
+                        // echo('
+                        // <form id="Edit'.$anim['CODEANIM'].'" method="POST" action="ModificationAnimation.php" style="margin-top: 10px;">
+                        //     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" 
+                        //     onclick="getElementById(\'Action'.$anim['CODEANIM'].'\').submit()">
+                        //     Editer l\'animation
+                        //     </button>
+                        //     <input type="hidden" name="codeAnim" value="'.$anim['CODEANIM'].'" />
+                        //     <input type="hidden" name="dateAct" value="'.$anim['DATEACT'].'" />
+                            
+                        // </form>
+                        // ');
+                        echo('
+                        <form id="Edit'.$anim['CODEANIM'].'" method="POST" action="AnnuleAnimation.php" style="margin-top: 10px;">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" 
+                            onclick="getElementById(\'Action'.$anim['CODEANIM'].'\').submit()">
+                            Annuler l\'activité
+                            </button>
+                            <input type="hidden" name="codeAnim" value="'.$anim['CODEANIM'].'" />
+                            <input type="hidden" name="dateAct" value="'.$anim['DATEACT'].'" />
+                            
+                        </form>
+                        ');
+                        $requeteInscrits = $bdd->prepare('SELECT * 
+                        FROM inscription 
+                        WHERE CODEANIM = \''.$anim['CODEANIM'].'\'
+                        AND DATEACT = \''.$anim['DATEACT'].'\'');
+                        $requeteInscrits->execute();
+                        $resultatInscrits = $requeteInscrits->fetchAll();
+                        if(!empty($resultatInscrits)){
+                            $message = "Inscrits: ";
+                            foreach($resultatInscrits as $key=>$user){
+                                $message .= $user['USER'].", ";
+                            }
+                            echo('
+                            <div style="margin-top: 10px;">
+                                <button id="toast'.$anim['CODEANIM'].$key.'" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" 
+                                type="button">Consulter les inscrits</button>
+                            </div>
+                            <div id="toastEx" class="mdl-js-snackbar mdl-snackbar">
+                            <div class="mdl-snackbar__text"></div>
+                            <button class="mdl-snackbar__action" type="button"></button>
+                            </div>
+                            <script>
+                            (function() {
+                            \'use strict\';
+                            window[\'counter\'] = 0;
+                            var snackbarContainer = document.querySelector(\'#toastEx\');
+                            var showToastButton = document.querySelector(\'#toast'.$anim['CODEANIM'].$key.'\');
+                            showToastButton.addEventListener(\'click\', function() {
+                                \'use strict\';
+                                var data = {message: "'.$message.'"};
+                                snackbarContainer.MaterialSnackbar.showSnackbar(data);
+                            });
+                            }());
+                            </script>
+                            ');
+                        }
+                    }
+                        echo ('
+                    </span>
+                </li>                
+            ');
+            }
+        }
+    }
   ?>
